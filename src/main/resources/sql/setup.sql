@@ -5,5 +5,5 @@ CREATE SCHEMA `chisana` DEFAULT CHARACTER SET utf8 ;
 
 CREATE USER 'app'@'localhost' IDENTIFIED BY 'app';
 
-GRANT ALL privileges ON *.* TO 'chisana'@'localhost'  identified BY 'app';
+GRANT ALL privileges ON *.* TO 'app'@'localhost'  identified BY 'app';
 

@@ -2,20 +2,42 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xsi:schemaLocation="
-            http://www.liquibase.org/xml/ns/dbchangelog
-            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
-            http://www.liquibase.org/xml/ns/dbchangelog-ext
-            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
 
     <changeSet id="SQL-1-0-0-1" author="cp">
         <sql>
             <![CDATA[
-
+                    CREATE TABLE `ch_user` (
+                      `USER_ID` bigint(20) NOT NULL,
+                      `EMAIL_ID` varchar(255) NOT NULL,
+                      `FIRST_NAME` varchar(255) DEFAULT NULL,
+                      `LAST_NAME` varchar(255) DEFAULT NULL,
+                      `MOBILE_NUMBER` varchar(13) DEFAULT NULL,
+                      `GENDER` varchar(10) DEFAULT NULL,
+                      `ACTIVE_FLG` tinyint(1) DEFAULT NULL,
+                      `APP_NAME` varchar(255) DEFAULT NULL,
+                      `PASSWORD` varchar(255) DEFAULT NULL,
+                      `CREATED_BY` varchar(255) DEFAULT NULL,
+                      `CREATED_DATE` datetime DEFAULT NULL,
+                      `UPDATED_DATE` datetime DEFAULT NULL,
+                      `UPDATED_BY` varchar(255) DEFAULT NULL,
+                      PRIMARY KEY (`USER_ID`),
+                      KEY `USER_EMAIL_ID_IDX` (`EMAIL_ID`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ]]>
         </sql>
     </changeSet>
+
+    <changeSet id="SQL-1-0-0-2" author="cp">
+        <sql>
+            <![CDATA[
+                    ALTER TABLE `ch_user`
+                    CHANGE COLUMN `USER_ID` `USER_ID` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '' ;
+            ]]>
+        </sql>
+    </changeSet>
+
 
 </databaseChangeLog>
