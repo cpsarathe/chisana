@@ -1,0 +1,31 @@
+Use Case -
+
+1. System should allow application user registration and provide unique apiKey to User.
+
+    1.1 System should expect user to provide minimum input of email , application domain URL e.g.
+    https://www.example.com , application name.
+
+    1.2 Validation
+        Email - standard
+        Domain URL - standard
+        Application name - Alphanumerice 255 character
+
+    1.3 On registration system should send email to user with verification link.
+
+    1.4 System should send response to user with successful message and apiKey for further use.
+
+    1.5 Verification link should be active for 30 days and be made configurable.
+
+    1.6 If verified successfully , system should mark domain as valid for further chisana URL request processing.
+
+System should allow same User to generate chisana URL for multiple domains.
+
+System should keep validity of generated chisana URL.
+
+System should generate report of generated URL per application.
+
+System should generate report of redirection request per application.
+
+
+
+

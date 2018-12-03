@@ -10,6 +10,7 @@ import com.cp.chisana.dto.UserDTO;
 import com.cp.chisana.service.UserService;
 import com.cp.chisana.utils.ApiHelper;
 import com.cp.chisana.utils.ResponseEnum;
+import com.cp.chisana.utils.Utilities;
 import com.cp.chisana.utils.ValidationErrorBuilder;
 
 import javax.annotation.Resource;
@@ -44,11 +45,15 @@ public class UserController {
             return apiHelper.getApiResponse(ResponseEnum.BAD_REQUEST_ERROR.getId(),Boolean.FALSE,"Invalid Request Data",userDTO);
         }
         //validate input
-        validator.validate(userDTO,bindingResult);
+
+        //stripping domain name from url and overriding passed input
+        String domainUrl = Utilities.stripDomainFromURL(userDTO.getAppDomainUrl());
+        userDTO.setAppDomainUrl(domainUrl);
+
+        validator.validate(userDTO, bindingResult);
         if(bindingResult.hasErrors()){
             return apiHelper.getApiResponse(ResponseEnum.VALIDATION_FAILURE.getId(), Boolean.FALSE, ResponseEnum.VALIDATION_FAILURE.getName(), validationErrorBuilder.writeValidationErrors(bindingResult));
         }
-
         userService.add(userDTO);
 
         return apiHelper.getApiResponse(ResponseEnum.SUCCESS.getId(),Boolean.TRUE,"User registered successfully",userDTO);

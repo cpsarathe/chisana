@@ -19,13 +19,11 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String url;
+    private String appDomainUrl;
     private String key;
     private String email;
     private String appName;
 
     @JsonIgnore
     private Long userId;
-
-
 }

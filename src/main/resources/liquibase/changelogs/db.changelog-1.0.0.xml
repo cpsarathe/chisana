@@ -9,35 +9,47 @@
     <changeSet id="SQL-1-0-0-1" author="cp">
         <sql>
             <![CDATA[
-                    CREATE TABLE `ch_user` (
-                      `USER_ID` bigint(20) NOT NULL,
-                      `EMAIL_ID` varchar(255) NOT NULL,
-                      `FIRST_NAME` varchar(255) DEFAULT NULL,
-                      `LAST_NAME` varchar(255) DEFAULT NULL,
-                      `MOBILE_NUMBER` varchar(13) DEFAULT NULL,
-                      `GENDER` varchar(10) DEFAULT NULL,
-                      `ACTIVE_FLG` tinyint(1) DEFAULT NULL,
-                      `APP_NAME` varchar(255) DEFAULT NULL,
-                      `PASSWORD` varchar(255) DEFAULT NULL,
-                      `CREATED_BY` varchar(255) DEFAULT NULL,
-                      `CREATED_DATE` datetime DEFAULT NULL,
-                      `UPDATED_DATE` datetime DEFAULT NULL,
-                      `UPDATED_BY` varchar(255) DEFAULT NULL,
-                      PRIMARY KEY (`USER_ID`),
-                      KEY `USER_EMAIL_ID_IDX` (`EMAIL_ID`)
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                   CREATE TABLE `ch_user` (
+                  `USER_ID` bigint(20) NOT NULL AUTO_INCREMENT,
+                  `EMAIL_ID` varchar(255) NOT NULL,
+                  `API_KEY` varchar(255) NOT NULL,
+                  `FIRST_NAME` varchar(255) DEFAULT NULL,
+                  `LAST_NAME` varchar(255) DEFAULT NULL,
+                  `MOBILE_NUMBER` varchar(13) DEFAULT NULL,
+                  `GENDER` varchar(10) DEFAULT NULL,
+                  `ACTIVE_FLG` tinyint(1) DEFAULT NULL,
+                  `APP_NAME` varchar(255) DEFAULT NULL,
+                  `PASSWORD` varchar(255) DEFAULT NULL,
+                  `CREATED_BY` varchar(255) DEFAULT NULL,
+                  `CREATED_DATE` datetime DEFAULT NULL,
+                  `UPDATED_DATE` datetime DEFAULT NULL,
+                  `UPDATED_BY` varchar(255) DEFAULT NULL,
+                  PRIMARY KEY (`USER_ID`),
+                  KEY `USER_EMAIL_ID_IDX` (`EMAIL_ID`),
+                  UNIQUE INDEX `USER_API_KEY_IDX` (`API_KEY`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ]]>
         </sql>
     </changeSet>
-
     <changeSet id="SQL-1-0-0-2" author="cp">
         <sql>
             <![CDATA[
-                    ALTER TABLE `ch_user`
-                    CHANGE COLUMN `USER_ID` `USER_ID` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '' ;
+                CREATE TABLE `ch_token` (
+                `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+                `CHANNEL` varchar(255) DEFAULT NULL,
+                `ACTIVE_FLG` tinyint(1) DEFAULT NULL,
+                `EXPIRED_DATE` datetime DEFAULT NULL,
+                `TOKEN` varchar(255) DEFAULT NULL,
+                `CHANNEL_TYPE` varchar(255) DEFAULT NULL,
+                `USER_ID` bigint(20) DEFAULT NULL,
+                `VALIDATED_FLG` tinyint(1) DEFAULT NULL,
+                `CREATED_DATE` datetime DEFAULT NULL,
+                `UPDATED_DATE` datetime DEFAULT NULL,
+                PRIMARY KEY (`ID`),
+                KEY `TOKEN_CHANNEL_TYPE_IDX` (`TOKEN`,`CHANNEL`,`CHANNEL_TYPE`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ]]>
         </sql>
     </changeSet>
-
 
 </databaseChangeLog>

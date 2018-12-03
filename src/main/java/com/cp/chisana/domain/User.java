@@ -30,6 +30,9 @@ public class User implements Serializable {
     @Column(name = "EMAIL_ID")
     protected String emailId;
 
+    @Column(name = "API_KEY")
+    protected String apiKey;
+
     @Column(name = "FIRST_NAME")
     protected String firstName;
 
