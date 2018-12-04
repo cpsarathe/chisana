@@ -9,7 +9,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Properties;
 
 /**
@@ -18,6 +26,7 @@ import java.util.Properties;
 @Configuration
 public class AppConfig {
 
+    private static final String EMAIL_TEMPLATE_ENCODING = "UTF-8"  ;
     @Value("${chisana.email.user.name}")
     private String emailUserName;
     @Value("${chisana.email.user.password}")
@@ -34,6 +43,8 @@ public class AppConfig {
     private String emailSmtpAuth;
     @Value("${chisana.email.smtp.starttls.enable}")
     private String emailTlsEnable;
+
+    private TemplateMode StandardTemplateModeHandlers;
 
     @Bean
     public MessageSource messageSource() {
@@ -64,4 +75,29 @@ public class AppConfig {
         return mailSender;
     }
 
+    @Bean
+    public TemplateEngine emailTemplateEngine() {
+        final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+//      Resolver for TEXT emails
+//      templateEngine.addTemplateResolver(textTemplateResolver());
+//      Resolver for HTML emails (except the editable one)
+        templateEngine.addTemplateResolver(htmlTemplateResolver());
+//      Resolver for HTML editable emails (which will be treated as a String)
+//      templateEngine.addTemplateResolver(stringTemplateResolver());
+//      Message source, internationalization specific to emails
+//      templateEngine.setTemplateEngineMessageSource(emailMessageSource());
+        return templateEngine;
+    }
+
+    @Bean
+    public SpringResourceTemplateResolver htmlTemplateResolver(){
+        SpringResourceTemplateResolver emailTemplateResolver = new SpringResourceTemplateResolver();
+        emailTemplateResolver.setOrder(Integer.valueOf(2));
+        emailTemplateResolver.setPrefix("classpath:/templates/mail/");
+        emailTemplateResolver.setSuffix(".html");
+        emailTemplateResolver.setTemplateMode(TemplateMode.HTML);
+        emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        emailTemplateResolver.setCacheable(false);
+        return emailTemplateResolver;
+    }
 }

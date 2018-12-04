@@ -18,4 +18,6 @@ public interface UserService {
 
     UserDTO update(UserDTO userDTO) ;
 
+    boolean verifyToken(String token);
+
 }

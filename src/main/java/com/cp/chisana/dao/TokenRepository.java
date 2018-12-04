@@ -12,4 +12,6 @@ import com.cp.chisana.domain.User;
 @Repository
 public interface TokenRepository extends CrudRepository<Token,Long> {
 
+    Token findByToken(String token);
+
 }

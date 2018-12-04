@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cp.chisana.dao.TokenRepository;
 import com.cp.chisana.dao.UserRepository;
@@ -15,10 +16,7 @@ import com.cp.chisana.dto.UserDTO;
 import com.cp.chisana.utils.TokenChannelEnum;
 import com.cp.chisana.utils.Utilities;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import javax.annotation.Resource;
 
@@ -34,9 +32,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private TokenRepository tokenRepository;
 
-    @Resource(name="chEmailService")
-    private EmailService emailService;
-
     @Value("${user.token.expiry.duration.days}")
     private int userTokenExpiryDays;
 
@@ -49,6 +44,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
+    @Transactional
     public UserDTO add(UserDTO userDTO) {
         String apiKey = Utilities.getApiKey();
         userDTO.setKey(apiKey);
@@ -59,12 +55,7 @@ public class UserServiceImpl implements UserService {
         Token token = buildToken(user);
         tokenRepository.save(token);
 
-
-        Email email = new Email();
-        email.setToEmail(user.getEmailId());
-        email.setSubject("Chisana New User Registration Email Verification");
-        email.setBody("Chisana New User Registration Email Verification");
-        emailService.sendSimpleMessage(email);
+        userDTO.setToken(token.getToken());
         return userDTO;
     }
 
@@ -81,6 +72,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO update(UserDTO userDTO) {
         return null;
+    }
+
+    @Override
+    public boolean verifyToken(String token) {
+        Token tokenObj = tokenRepository.findByToken(token);
+        if(Objects.isNull(tokenObj)) {
+            return false;
+        }
+
+        Date date = Calendar.getInstance().getTime();
+        //verify if token is not yet validated and not yet expired
+        if(tokenObj.getValidatedFlg()==0 && tokenObj.getExpiredDate().before(date)) {
+            tokenObj.setValidatedFlg((byte)1);
+            tokenObj.setUpdatedDate(date);
+            tokenRepository.save(tokenObj);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     private User convertUserDTOToUser(UserDTO dto){
