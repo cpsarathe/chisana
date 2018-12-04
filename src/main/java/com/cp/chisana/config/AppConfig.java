@@ -93,7 +93,7 @@ public class AppConfig {
     public SpringResourceTemplateResolver htmlTemplateResolver(){
         SpringResourceTemplateResolver emailTemplateResolver = new SpringResourceTemplateResolver();
         emailTemplateResolver.setOrder(Integer.valueOf(2));
-        emailTemplateResolver.setPrefix("classpath:/templates/mail/");
+        emailTemplateResolver.setPrefix("classpath:/templates/");
         emailTemplateResolver.setSuffix(".html");
         emailTemplateResolver.setTemplateMode(TemplateMode.HTML);
         emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
